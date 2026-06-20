@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DM Logger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f0d;
+      --bg-card: #111714;
+      --border: #1f2a24;
+      --border-hover: #2dd4a0;
+      --teal: #2dd4a0;
+      --teal-soft: #2dd4a022;
+      --teal-dim: #6ee7c1;
+      --text: #e4e9e6;
+      --text-dim: #6b7873;
+      --text-muted: #8c9a93;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 18px;
+      font-size: 13px;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: relative;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -40px;
+      width: 220px;
+      height: 140px;
+      background: radial-gradient(ellipse at center, var(--teal-soft), transparent 70%);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 .spark { color: var(--teal); }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .entry {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .entry:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 0 0 1px var(--teal-soft), 0 4px 16px -4px var(--teal-soft);
+    }
+
+    .name {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: 0.005em;
+    }
+
+    .label {
+      color: var(--text-dim);
+      font-size: 10px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 500;
+    }
+    .label:first-of-type { margin-top: 0; }
+
+    .value {
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.5;
+      font-size: 12.5px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 500;
+      margin-top: 8px;
+      margin-right: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .meet { background: #2dd4a022; color: var(--teal-dim); border: 1px solid #2dd4a055; }
+    .replied { background: #2dd4a022; color: var(--teal-dim); border: 1px solid #2dd4a055; }
+    .pending { background: #92400e26; color: #fbbf24; border: 1px solid #92400e4a; }
+    .action { background: #0369a126; color: #38bdf8; border: 1px solid #0369a14a; }
+
+    .sentiment-interested { background: #2dd4a022; color: var(--teal-dim); border: 1px solid #2dd4a055; }
+    .sentiment-skeptical { background: #92400e26; color: #fbbf24; border: 1px solid #92400e4a; }
+    .sentiment-declined { background: #7f1d1d26; color: #f87171; border: 1px solid #7f1d1d4a; }
+    .sentiment-neutral { background: #37415126; color: #cbd5e1; border: 1px solid #3741514a; }
+    .sentiment-no_reply { background: #37415126; color: var(--text-muted); border: 1px solid #3741514a; }
+
+    .timestamp {
+      color: var(--text-dim);
+      font-size: 10px;
+      margin-top: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .empty {
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 60px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .clear-btn {
+      width: 100%;
+      padding: 9px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 7px;
+      cursor: pointer;
+      margin-bottom: 18px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.02em;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .clear-btn:hover { border-color: #f8717155; color: #f87171; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><span class="spark"></span> Ongoing Convos</h1>
+  </div>
+  <button class="clear-btn" id="clearBtn">clear all logs</button>
+  <div id="logs"></div>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "DM Logger",
+  "version": "1.0",
+  "description": "Logs LinkedIn DMs to Google Sheets",
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "identity",
+    "identity.email"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*",
+    "https://sheets.googleapis.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "DM Logger"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "oauth2": {
+    "client_id": "880202804215-ivahqj8dvj49eptst7ja93opd7jsp7p5.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/spreadsheets"
+    ]
+  }
+}
